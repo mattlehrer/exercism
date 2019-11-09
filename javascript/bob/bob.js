@@ -11,12 +11,13 @@
 */
 
 export const hey = message => {
+  const isSilence = m => !m;
+  const isQuestion = m => m.endsWith('?');
+  const isYelling = m => (m.match(/^[^a-z]*$/) || m.match(/^([A-Z]|\s)*$/)) && !m.match(/^([0-9]|\W)*$/);
+
   message = message.trim();
-  if (!message) return 'Fine. Be that way!';
-  if (message.endsWith('?')) {
-    if (message.match(/^([^A-Z]|\s)*\?$/) || message.match(/[a-z]/)) return 'Sure.';
-    return `Calm down, I know what I'm doing!`;
-  }
-  if ((message.match(/^[^a-z]*$/) || message.match(/^([A-Z]|\s)*$/)) && !message.match(/^([0-9]|\W)*$/)) return 'Whoa, chill out!';
+  if (isSilence(message)) return 'Fine. Be that way!';
+  if (isQuestion(message)) return isYelling(message) ? `Calm down, I know what I'm doing!` : 'Sure.';
+  if (isYelling(message)) return 'Whoa, chill out!';
   return 'Whatever.';
 };
