@@ -1,7 +1,3 @@
-const next = (x, y, n) => {
-
-}
-
 export class SpiralMatrix {
   static ofSize(n) {
     let spiral = [];
