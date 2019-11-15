@@ -5,22 +5,20 @@ export default class Triangle {
     this.side3 = side3;
   }
 
-  kind () {
+  kind() {
     if (this.side1 <= 0 || this.side2 <= 0 || this.side3 <= 0) {
       throw 'zero/negative side';
     }
 
     if (this.side1 + this.side2 < this.side3 || this.side1 + this.side3 < this.side2 || this.side2 + this.side3 < this.side1) {
-      throw 'violates inequality'
+      throw 'violates inequality';
     }
 
     if (this.side1 === this.side2 && this.side1 === this.side3) {
-      return 'equilateral'
-    } else if (this.side1 === this.side2 || this.side1 === this.side3 || this.side2 === this.side3) {
-      return 'isosceles'
-    } else {
-      return 'scalene'
+      return 'equilateral';
+    } if (this.side1 === this.side2 || this.side1 === this.side3 || this.side2 === this.side3) {
+      return 'isosceles';
     }
+    return 'scalene';
   }
-
 }
