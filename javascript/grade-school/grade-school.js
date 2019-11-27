@@ -1,24 +1,22 @@
 export class GradeSchool {
-  #classList;
-  
   constructor() {
-    this.#classList = {};
+    this.classList = {};
   }
   
   roster() {
-    return this.#classList;
+    return JSON.parse(JSON.stringify(this.classList));
   }
 
   add(name, grade) {
-    this.#classList[grade]
-      ? this.#classList[grade].push(name) 
-      : this.#classList[grade] = [name];
-    this.#classList[grade] = this.#classList[grade].sort();
+    this.classList[grade]
+      ? this.classList[grade].push(name) 
+      : this.classList[grade] = [name];
+    this.classList[grade] = this.classList[grade].sort();
   }
 
   grade(grade) {
-    return this.#classList[grade]
-      ? this.#classList[grade]
+    return this.classList[grade]
+      ? [...this.classList[grade]]
       : [];
   }
 }
