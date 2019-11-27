@@ -1,5 +1,3 @@
-let treeStore;
-
 export class Zipper {
   constructor(tree, focus = null, parent = null) {
     this.tree = tree;
@@ -49,4 +47,4 @@ export class Zipper {
 
   // delete (removes the focus node and all subtrees, focus moves to the next node if possible otherwise to the prev node if possible, otherwise to the parent node, returns a new zipper)
   delete() {}
-};
+}
