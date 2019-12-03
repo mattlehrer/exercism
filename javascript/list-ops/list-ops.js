@@ -1,6 +1,10 @@
 export class List {
   constructor(items = []) {
-    this.values = [...items];
+    this._values = [...items];
+  }
+
+  get values() {
+    return [...this._values];
   }
 
   append(moreItems) {
@@ -8,31 +12,34 @@ export class List {
   }
 
   concat(moreLists) {
-    let lists = [...moreLists.values];
-    let newList = [];
-    while (lists.length) {
-      const front = lists.shift();
-      if (front.values !== null && typeof front.values[Symbol.iterator] === 'function') {
-        newList.push(...front.values);
-      }
+    const flatten = lists => {
+      if (lists.values && !lists.values.length || !lists.values) return [];
+      const [first, ...xs] = lists.values;
+      return [...first.values, ...flatten(new List(xs))];
     }
-    return new List([...this.values, ...newList]);
+    return new List([...this.values, ...flatten(moreLists)]);
   }
 
   filter(cb) {
-    const newList = [];
-    this.values.forEach(el => {
-      if (cb(el)) newList.push(el);
-    });
-    return new List(newList);
+    const filterRecursion = (list, cb) => {
+      if (!list.values.length) return new List();
+      const [first, ...xs] = list.values;
+      if (!xs.length) {
+        return cb(first) ? new List([first]) : new List();
+      } else {
+        return cb(first) ? new List([first]).append(filterRecursion(new List(xs), cb)) : filterRecursion(new List(xs), cb);
+      }
+    }
+    return filterRecursion(this, cb);
   }
 
   map(cb) {
-    const newList = [];
-    this.values.forEach(el => {
-      newList.push(cb(el));
-    });
-    return new List(newList);
+    const mapRecursion = (list, cb) => {
+      if (!list.values.length) return new List();
+      const [first, ...xs] = list.values;
+      return xs.length ? new List([cb(first), ...mapRecursion(new List(xs), cb).values]) : new List([cb(first)]);
+    }
+    return mapRecursion(this, cb);
   }
 
   length() {
@@ -40,26 +47,24 @@ export class List {
   }
 
   foldl(cb, initValue) {
-    let acc = initValue;
-    for (let i = 0; i < this.length(); i++) {
-      acc = cb(acc, this.values[i]);
-    }
-    return acc;
+    const reduce = (xs = this.values, acc = initValue, f = cb, i = 0) => i == xs.length ? acc : reduce(xs, f(acc, xs[i]), f, i + 1);
+    return reduce();
   }
 
   foldr(cb, initValue) {
-    let acc = initValue;
-    for (let i = this.length() - 1; i >= 0; i--) {
-      acc = cb(acc, this.values[i]);
-    }
-    return acc;
+    return this.reverse().foldl(cb, initValue);
   }
 
   reverse() {
-    let newList = [];
-    for (let i = this.length() - 1; i >= 0; i--) {
-      newList.push(this.values[i]);
+    const revRecursion = (xs, i, j) => {
+      if (i<j) {
+        const temp = xs[i];
+        xs[i] = xs[j];
+        xs[j] = temp;
+        revRecursion(xs, i+1, j-1);
+      }
+      return xs;
     }
-    return new List(newList);
+    return new List(revRecursion(this.values, 0, this.length()-1));
   }
 }
