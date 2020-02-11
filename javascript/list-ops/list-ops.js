@@ -18,6 +18,7 @@ export class List {
       return [...first.values, ...flatten(new List(xs))];
     }
     return new List([...this.values, ...flatten(moreLists)]);
+    // return new List(moreLists.foldl((acc, l) => acc.append(l), this));
   }
 
   filter(cb) {
@@ -31,6 +32,7 @@ export class List {
       }
     }
     return filterRecursion(this, cb);
+    // return this.foldl((acc, item) => (cb(item) && );
   }
 
   map(cb) {
@@ -47,8 +49,8 @@ export class List {
   }
 
   foldl(cb, initValue) {
-    const reduce = (xs = this.values, acc = initValue, f = cb, i = 0) => i == xs.length ? acc : reduce(xs, f(acc, xs[i]), f, i + 1);
-    return reduce();
+    const reduce = (xs, acc, f, i = 0) => i == xs.length ? acc : reduce(xs, f(acc, xs[i]), f, i + 1);
+    return reduce(this.values, initValue, cb, 0);
   }
 
   foldr(cb, initValue) {
