@@ -1,18 +1,50 @@
+import threading
+import time
+
 class BankAccount:
     def __init__(self):
-        pass
+        self.status = 'closed'
+        self.balance = 0
+        self._lock = threading.Lock()
 
     def get_balance(self):
-        pass
+        with self._lock:
+            if self.status == 'open':
+                return self.balance
+            raise ValueError('Account not open')
 
     def open(self):
-        pass
+        with self._lock:
+            if self.status == 'closed':
+                self.status = 'open'
+                self.balance = 0
+            else:
+                raise ValueError('Account already open')
 
     def deposit(self, amount):
-        pass
+        with self._lock:
+            if self.status == 'open':
+                if amount > 0:
+                    self.balance = self.balance + amount
+                else:
+                    raise ValueError('Invalid deposit')
+            else:
+                raise ValueError('Account not open')
 
     def withdraw(self, amount):
-        pass
+        with self._lock:
+            if self.status == 'open':
+                if amount > 0 and amount <= self.balance:
+                    self.balance = self.balance - amount
+                else:
+                    raise ValueError('Invalid withdrawal')
+            else:
+                raise ValueError('Account not open')
 
     def close(self):
-        pass
+        with self._lock:
+            if self.status == 'open':
+                self.status = 'closed'
+                self.balance = 0
+            else:
+                raise ValueError('Account already closed')
