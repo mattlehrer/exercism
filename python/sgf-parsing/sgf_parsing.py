@@ -26,4 +26,11 @@ class SgfTree:
 
 
 def parse(input_string):
-    pass
+    if len(input_string) < 3 or input_string[0] != '(' or input_string[1] != ';' or input_string[-1] != ')':
+        raise ValueError('Invalid string')
+    else:
+      properties = {}
+      stack = [ch for ch in input_string[2:-1]]
+      
+      children = []
+      return SgfTree(properties, children)
