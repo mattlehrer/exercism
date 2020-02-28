@@ -1,5 +1,4 @@
 import threading
-import time
 
 class BankAccount:
     def __init__(self):
@@ -34,7 +33,7 @@ class BankAccount:
     def withdraw(self, amount):
         with self._lock:
             if self.status == 'open':
-                if amount > 0 and amount <= self.balance:
+                if 0 < amount <= self.balance:
                     self.balance = self.balance - amount
                 else:
                     raise ValueError('Invalid withdrawal')
