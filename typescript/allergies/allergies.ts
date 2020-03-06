@@ -1,5 +1,6 @@
 export default class Allergies {
 	private score: number;
+	private allergies: string[];
 
 	private readonly ALLERGEN_SCORES: { [food: string]: number } = {
 		eggs: 1,
@@ -14,6 +15,10 @@ export default class Allergies {
 
 	constructor(score: number) {
 		this.score = score;
+		this.allergies = [];
+		for (const food in this.ALLERGEN_SCORES) {
+			if (this.allergicTo(food)) this.allergies.push(food);
+		}
 	}
 
 	allergicTo = (food: string): boolean => {
@@ -21,10 +26,6 @@ export default class Allergies {
 	};
 
 	list = (): string[] => {
-		const allergies: string[] = [];
-		for (const food in this.ALLERGEN_SCORES) {
-			if (this.allergicTo(food)) allergies.push(food);
-		}
-		return allergies;
+		return this.allergies;
 	};
 }
