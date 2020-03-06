@@ -1,7 +1,7 @@
 export default class Allergies {
 	private score: number;
 
-	private ALLERGEN_SCORES: { [food: string]: number } = {
+	private readonly ALLERGEN_SCORES: { [food: string]: number } = {
 		eggs: 1,
 		peanuts: 2,
 		shellfish: 4,
