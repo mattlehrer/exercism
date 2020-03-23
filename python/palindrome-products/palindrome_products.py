@@ -19,7 +19,7 @@ def palindromes(numbers):
     return {n for n in numbers if is_palindrome(n)}
 
 
-def largest(max_factor, min_factor = 0):
+def largest(max_factor, min_factor=0):
     if max_factor < min_factor:
         raise ValueError('Invalid')
     pals = palindromes(products(min_factor, max_factor))
@@ -27,13 +27,21 @@ def largest(max_factor, min_factor = 0):
         value = max(pals)
         return value, factors(value, min_factor, max_factor)
     return None, []
+    # looking for efficient method but this doesn't find max
+    # for i in range(max_factor, min_factor - 1, -1):
+    #     for j in range(max_factor, i - 1, -1):
+    #         value = i * j
+    #         if is_palindrome(value):
+    #             return value, factors(value, min_factor, max_factor)
+    # return None, []
 
 
-def smallest(max_factor, min_factor = 0):
+def smallest(max_factor, min_factor=0):
     if max_factor <= min_factor:
         raise ValueError('Invalid')
-    pals = palindromes(products(min_factor, max_factor))
-    if pals:
-        value = min(pals)
-        return value, factors(value, min_factor, max_factor)
+    for i in range(min_factor, max_factor + 1):
+        for j in range(min_factor, i + 1):
+            value = i * j
+            if is_palindrome(value):
+                return value, factors(value, min_factor, max_factor)
     return None, []
