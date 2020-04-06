@@ -20,7 +20,8 @@ def filelike_objects_are_closed_on_exception(filelike_object):
     try:
         filelike_object.open()
         filelike_object.do_something()
-        filelike_object.close()
     except:
-        filelike_object.close()
         raise Exception("Failed while doing something")
+    finally:
+        filelike_object.close()
+
